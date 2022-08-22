@@ -1,3 +1,6 @@
+require("./mongo");
+
+const Note = require("./models/Note");
 const express = require("express");
 const cors = require("cors");
 
@@ -8,45 +11,23 @@ app.use(cors());
 app.use(express.json());
 app.use(logger);
 
-let notes = [
-  {
-    id: 1,
-    content: "Instalar Node js",
-    date: "2022-10-20",
-    important: true,
-  },
-  {
-    id: 2,
-    content: "Repasar Java",
-    date: "2022-09-20",
-    important: false,
-  },
-  {
-    id: 3,
-    content: "Hacer retos de backend",
-    date: "2022-12-20",
-    important: true,
-  },
-  {
-    id: 4,
-    content: "Mirar youtube para aprender C#",
-    date: "2022-08-20",
-    important: true,
-  },
-  {
-    id: 5,
-    content: "Ir a comprar pan",
-    date: "2022-08-20",
-    important: true,
-  },
-];
+let notes = [];
 
 app.get("/", (request, response) => {
-  response.send("<h1>Hola Mundo</h1>");
+  response.send("<h1>Hola Mundo!!</h1>");
 });
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  Note.find({})
+    .then((notes) => {
+      response.json(notes);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      console.log("finally");
+    });
 });
 
 app.post("/api/notes", (request, response) => {
